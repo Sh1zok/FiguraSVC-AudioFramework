@@ -1,5 +1,5 @@
 # VCFramework
-Voice Chat Framework - скрипт облегчающий работу с [FiguraSVC](https://github.com/KnownSH/FiguraSVC) v2.0
+Voice Chat Framework - a script that makes working with [FiguraSVC](https://github.com/KnownSH/FiguraSVC) v2.0 easier
 
 VCFramework - The main variable, all necessary functions are contained here
 
