@@ -23,7 +23,7 @@ True if the microphone is active.</br>
 Changing frequency: Every tick with good internet connection.
 
 ## VCFramework.getVoiceVolume(rawAudio)
-Function that returns the audio volume value. Accepts a raw audio stream.
+Function that returns the audio volume value. Takes in a raw audio stream.
 
 # VCFramework.checkDependencies()
 Checking dependencies
