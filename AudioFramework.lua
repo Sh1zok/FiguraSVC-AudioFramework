@@ -55,10 +55,7 @@ events.tick:register(function()
     if VCFramework.isMicrophoneActive then pings.setCurrentHostVoiceVolume(newHostVoiceVolume) end
 
     -- Reset variables if microphone in not active
-    if not VCFramework.isMicrophoneActive and oldHostVoiceVolume ~= 0 then
-        pings.setCurrentHostVoiceVolume(0)
-        for index = 0, 959 do VCFramework.rawAudioStream[index] = 0 end
-    end
+    if not VCFramework.isMicrophoneActive and oldHostVoiceVolume ~= 0 then pings.setCurrentHostVoiceVolume(0) end
 end, "VCFramework")
 
 events.RENDER:register(function()
