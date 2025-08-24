@@ -1,5 +1,5 @@
 --[[
-    Name: Voice Chat Framework v1.0
+    Name: Voice Chat Framework v1.1
     Description: FiguraSVC v2.0 framework
     Author: Sh1zok
     Credits: https://discordapp.com/users/416278117209079809
@@ -11,6 +11,7 @@ VCFramework.smoothHostVoiceVolume = 0 -- Decimal number from 0(queit) to INF, bu
 VCFramework.rawAudioStream = {} -- List of 960 values​(indices from 0 to 959)
 for index = 0, 959 do VCFramework.rawAudioStream[index] = 0 end -- Filling the list with zeros to prevent errors
 VCFramework.isMicrophoneActive = false -- True if the microphone is active
+VCFramework.pingCooldownTicks = 0
 
 -- Checking dependencies:
 -- If returns 0 | Everything must work correctly
@@ -40,6 +41,7 @@ function pings.setCurrentHostVoiceVolume(value)
     VCFramework.hostVoiceVolume = value
 end
 
+local cooldown = VCFramework.pingCooldownTicks
 events.tick:register(function()
     -- Saving old correct voice volume
     local oldHostVoiceVolume = VCFramework.hostVoiceVolume
@@ -52,15 +54,21 @@ events.tick:register(function()
     VCFramework.isMicrophoneActive = newHostVoiceVolume ~= oldHostVoiceVolume
 
     -- Setting the voice volume for non-hosts(even for those who do not have FiguraSVC installed)
-    if VCFramework.isMicrophoneActive then pings.setCurrentHostVoiceVolume(newHostVoiceVolume) end
+    if VCFramework.isMicrophoneActive then
+        cooldown = cooldown - 1
+        if cooldown <= 1 then
+            pings.setCurrentHostVoiceVolume(newHostVoiceVolume)
+            cooldown = VCFramework.pingCooldownTicks
+        end
+    end
 
     -- Reset variables if microphone in not active
     if not VCFramework.isMicrophoneActive and oldHostVoiceVolume ~= 0 then pings.setCurrentHostVoiceVolume(0) end
 end, "VCFramework")
 
-events.RENDER:register(function()
+events.RENDER:register(function(delta)
     -- Сalculating the smooth voice volume every render frame
-    VCFramework.smoothHostVoiceVolume = math.lerp(VCFramework.smoothHostVoiceVolume, VCFramework.hostVoiceVolume, 1) -- TO-DO: REPLACE THIS FUCKING MAGIC NUMBER
+    VCFramework.smoothHostVoiceVolume = math.lerp(VCFramework.smoothHostVoiceVolume, VCFramework.hostVoiceVolume, 0.5 * delta)
 end, "VCFramework")
 
 if VCFramework.checkDependencies() ~= 0 then return end
