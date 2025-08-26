@@ -25,7 +25,7 @@ Changing frequency: Every tick with good internet connection.
 ## VCFramework.getVoiceVolume(rawAudio)
 Function that returns the audio volume value. Takes in a raw audio stream.
 
-# VCFramework.checkDependencies()
+## VCFramework.checkDependencies()
 Checking dependencies
 > [!TIP]
 > Returns 0 if everything must work correctly</br>
