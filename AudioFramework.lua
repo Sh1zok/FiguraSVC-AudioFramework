@@ -11,7 +11,7 @@ VCFramework.smoothHostVoiceVolume = 0 -- Decimal number from 0(queit) to INF, bu
 VCFramework.rawAudioStream = {} -- List of 960 values​(indices from 0 to 959)
 for index = 0, 959 do VCFramework.rawAudioStream[index] = 0 end -- Filling the list with zeros to prevent errors
 VCFramework.isMicrophoneActive = false -- True if the microphone is active
-VCFramework.pingCooldownTicks = 0
+VCFramework.pingCooldownTicks = 2
 
 -- Checking dependencies:
 -- If returns 0 | Everything must work correctly
@@ -68,7 +68,8 @@ end, "VCFramework")
 
 events.RENDER:register(function(delta)
     -- Сalculating the smooth voice volume every render frame
-    VCFramework.smoothHostVoiceVolume = math.lerp(VCFramework.smoothHostVoiceVolume, VCFramework.hostVoiceVolume, 0.5 * delta)
+    VCFramework.smoothHostVoiceVolume = math.lerp(VCFramework.smoothHostVoiceVolume, VCFramework.hostVoiceVolume, math.min(17 / client:getFPS(), 1))
+    print(VCFramework.smoothHostVoiceVolume)
 end, "VCFramework")
 
 if VCFramework.checkDependencies() ~= 0 then return end
