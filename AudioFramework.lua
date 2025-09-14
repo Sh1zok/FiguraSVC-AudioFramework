@@ -69,7 +69,6 @@ end, "VCFramework")
 events.RENDER:register(function(delta)
     -- Сalculating the smooth voice volume every render frame
     VCFramework.smoothHostVoiceVolume = math.lerp(VCFramework.smoothHostVoiceVolume, VCFramework.hostVoiceVolume, math.min(17 / client:getFPS(), 1))
-    print(VCFramework.smoothHostVoiceVolume)
 end, "VCFramework")
 
 if VCFramework.checkDependencies() ~= 0 then return end
