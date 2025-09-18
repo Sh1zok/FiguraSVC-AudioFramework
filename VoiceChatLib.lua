@@ -1,7 +1,7 @@
 --[[
     ■■■■■ VoiceChatLib
     ■   ■ Author: Sh1zok
-    ■■■■  v1.0.0
+    ■■■■  v1.0.1
 
 MIT License
 
@@ -37,15 +37,17 @@ voiceChat = {
         smoothHostVoiceVolume = 0, -- Host's SMOOTH microphone volume level. Float number between 0 and 1
         rawAudioStream = {}, -- Raw audio data. Indexes from 0 to 959
         isMicrophoneActive = false, -- True if the microphone is active
-        ticksUntilRefreshPing = 1,
+        ticksUntilRefreshPing = 2,
     },
     hostVoiceVolumeRefreshRateTicks = 2,
     voiceSmoothingStrenght = 20,
     voiceCutoffThreshold = 0.05
 }
 
--- Filling the list with zeros to prevent errors
-for index = 0, 959 do voiceChat.get.rawAudioStream[index] = 0 end
+local zeroRaw = {}
+for index = 0, 959 do zeroRaw[index] = 0 end
+voiceChat.get.rawAudioStream = zeroRaw
+
 
 
 
@@ -79,6 +81,7 @@ function events.tick()
     if not voiceChat.get.isMicrophoneActive then return end
     voiceChat.get.ticksUntilRefreshPing = voiceChat.get.ticksUntilRefreshPing - 1
     if voiceChat.get.ticksUntilRefreshPing > 0 then return end
+
     if host:isHost() then pings.voiceChatSync(voiceChat.get.hostVoiceVolume, true) end
     voiceChat.get.ticksUntilRefreshPing = voiceChat.hostVoiceVolumeRefreshRateTicks
 end
@@ -100,5 +103,8 @@ function events.tick()
     if voiceChat.get.hostVoiceVolume <= voiceChat.voiceCutoffThreshold then voiceChat.get.hostVoiceVolume = 0 end
 
     voiceChat.get.isMicrophoneActive = voiceChat.get.hostVoiceVolume ~= oldHostVoiceVolume
-    if not voiceChat.get.isMicrophoneActive and oldHostVoiceVolume ~= 0 then pings.voiceChatSync(0, false) end
+    if not voiceChat.get.isMicrophoneActive and voiceChat.get.hostVoiceVolume ~= 0 then
+        pings.voiceChatSync(0, false)
+        voiceChat.get.rawAudioStream = zeroRaw
+    end
 end
