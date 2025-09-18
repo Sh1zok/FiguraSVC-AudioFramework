@@ -37,7 +37,7 @@ voiceChat = {
         smoothHostVoiceVolume = 0, -- Host's SMOOTH microphone volume level. Float number between 0 and 1
         rawAudioStream = {}, -- Raw audio data. Indexes from 0 to 959
         isMicrophoneActive = false, -- True if the microphone is active
-        ticksUntilRefreshPing = 2,
+        ticksUntilRefreshPing = 1,
     },
     hostVoiceVolumeRefreshRateTicks = 2,
     voiceSmoothingStrenght = 20,
